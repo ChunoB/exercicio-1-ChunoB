@@ -6,8 +6,8 @@ imax = 20;
 % nao alterar: fim
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-
-t = zeros(imax, 1);
+t=0;
+x = zeros(imax, 1);
 x(1)= x0;
 erro = zeros(length(t), 1);
 
