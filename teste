@@ -1,0 +1,17 @@
+Test code 1:
+octave --eval "tr = exercicio1(@(t)
+sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-1, @(t)
+(9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2-1), 10);
+assert(tr, 0.0283, 0.01)"
+
+Test code 2:
+octave --eval "tr = exercicio1(@(t)
+sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-5, @(t)
+(9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2-5), 10);
+assert(tr, 0.1463, 0.01)"
+
+Test code 3:
+octave --eval "tr = exercicio1(@(t)
+sqrt(2*9.81*13.5)*tanh(sqrt(2*9.81*13.5)/(2*3.75)*t)-5, @(t)
+(9.81*13.5/3.75*sech(sqrt(2*9.81*13.5)/(2*3.75)*t)^2-10), 10);
+assert(tr, 0.4680, 0.01)"
