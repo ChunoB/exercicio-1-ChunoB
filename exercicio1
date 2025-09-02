@@ -5,21 +5,33 @@ function t = exercicio1(func, func_d, x0)
   imax = 20;
   % nao alterar: fim
 
-  % Valores iniciais para a secante
-  x_prev = x0 * 0.9;  % pequeno ajuste
+  % Inicialização
+  x_prev = x0 * 0.9;  % para secante
   x_curr = x0;
 
   for ii = 1:imax
-    f_prev = func(x_prev);
     f_curr = func(x_curr);
+    df_curr = func_d(x_curr);
 
-    % Evita divisão por zero
-    if f_curr == f_prev
-      break
+    % Tenta Newton-Raphson se derivada não for zero
+    if df_curr ~= 0
+      x_next = x_curr - f_curr/df_curr;
+    else
+      % Se derivada zero, cai no passo da secante
+      f_prev = func(x_prev);
+      if f_curr ~= f_prev
+        x_next = x_curr - f_curr*(x_curr - x_prev)/(f_curr - f_prev);
+      else
+        % Evita divisão por zero, faz pequeno passo
+        x_next = x_curr - 0.1*f_curr;
+      endif
     endif
 
-    % Passo da secante
-    x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev);
+    % Limita passo para evitar disparos
+    max_step = 1.0; 
+    if abs(x_next - x_curr) > max_step
+      x_next = x_curr + sign(x_next - x_curr)*max_step;
+    endif
 
     % Checa convergência
     if abs(x_next - x_curr) < es
@@ -27,12 +39,12 @@ function t = exercicio1(func, func_d, x0)
       return
     endif
 
-    % Atualiza para próxima iteração
+    % Atualiza valores
     x_prev = x_curr;
     x_curr = x_next;
   endfor
 
-  % Se não convergiu, retorna último valor
+  % Retorna último valor calculado
   t = x_curr;
 
 endfunction
