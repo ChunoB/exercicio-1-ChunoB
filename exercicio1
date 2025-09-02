@@ -5,20 +5,34 @@ function t = exercicio1(func, func_d, x0)
   imax = 20;
   % nao alterar: fim
 
-  v = zeros(imax,1);     % vetor de iterações
-  v(1) = x0;             % chute inicial
-  erro = zeros(imax,1);  % vetor de erros
+  % Valores iniciais para a secante
+  x_prev = x0 * 0.9;  % pequeno ajuste
+  x_curr = x0;
 
-  for ii = 1:imax-1
-    if ii ~= 1
-      erro(ii) = abs((v(ii)-v(ii-1))/v(ii));
-      if erro(ii) < es
-        break;
-      endif
+  for ii = 1:imax
+    f_prev = func(x_prev);
+    f_curr = func(x_curr);
+
+    % Evita divisão por zero
+    if f_curr == f_prev
+      break
     endif
-    v(ii+1) = v(ii) - func(v(ii))/func_d(v(ii));
+
+    % Passo da secante
+    x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev);
+
+    % Checa convergência
+    if abs(x_next - x_curr) < es
+      t = x_next;
+      return
+    endif
+
+    % Atualiza para próxima iteração
+    x_prev = x_curr;
+    x_curr = x_next;
   endfor
 
-  t = v(ii);   % último valor é a raiz
+  % Se não convergiu, retorna último valor
+  t = x_curr;
 
 endfunction
