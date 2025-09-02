@@ -5,29 +5,23 @@ function t = exercicio1(func, func_d, x0)
   imax = 20;
   % nao alterar: fim
 
-  x_curr = x0;
+  v = zeros(imax,1);     % vetor de iterações
+  v(1) = x0;             % chute inicial
 
-  for ii = 1:imax
-    f_curr = func(x_curr);
-    df_curr = func_d(x_curr);
+  for ii = 1:imax-1
+    % Atualiza usando Newton-Raphson
+    v(ii+1) = v(ii) - func(v(ii))/func_d(v(ii));
 
-    % Evita divisão por zero
-    if df_curr == 0
-      break
-    end
+    % Calcula erro absoluto
+    erro = abs(v(ii+1)-v(ii));
 
-    % Passo de Newton
-    x_next = x_curr - f_curr / df_curr;
-
-    % Checa convergência
-    if abs(x_next - x_curr) < es
-      t = x_next;
+    % Se convergiu, retorna imediatamente
+    if erro < es
+      t = v(ii+1);
       return
     end
-
-    x_curr = x_next;
   end
 
-  % Se não convergiu, retorna último valor
-  t = x_curr;
+  % Retorna último valor se não convergir antes
+  t = v(imax);
 end
