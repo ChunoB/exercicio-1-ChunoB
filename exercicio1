@@ -1,50 +1,33 @@
+% filepath: c:\Users\bruno\OneDrive\Desktop\scaffolds\exercicio1.m
 function t = exercicio1(func, func_d, x0)
-
   % nao alterar: inicio
   es = 0.01;
   imax = 20;
   % nao alterar: fim
 
-  % Inicialização
-  x_prev = x0 * 0.9;  % para secante
   x_curr = x0;
 
   for ii = 1:imax
     f_curr = func(x_curr);
     df_curr = func_d(x_curr);
 
-    % Tenta Newton-Raphson se derivada não for zero
-    if df_curr ~= 0
-      x_next = x_curr - f_curr/df_curr;
-    else
-      % Se derivada zero, cai no passo da secante
-      f_prev = func(x_prev);
-      if f_curr ~= f_prev
-        x_next = x_curr - f_curr*(x_curr - x_prev)/(f_curr - f_prev);
-      else
-        % Evita divisão por zero, faz pequeno passo
-        x_next = x_curr - 0.1*f_curr;
-      endif
-    endif
+    % Evita divisão por zero
+    if df_curr == 0
+      break
+    end
 
-    % Limita passo para evitar disparos
-    max_step = 1.0; 
-    if abs(x_next - x_curr) > max_step
-      x_next = x_curr + sign(x_next - x_curr)*max_step;
-    endif
+    % Passo de Newton
+    x_next = x_curr - f_curr / df_curr;
 
     % Checa convergência
     if abs(x_next - x_curr) < es
       t = x_next;
       return
-    endif
+    end
 
-    % Atualiza valores
-    x_prev = x_curr;
     x_curr = x_next;
-  endfor
+  end
 
-  % Retorna último valor calculado
+  % Se não convergiu, retorna último valor
   t = x_curr;
-
-endfunction
+end
