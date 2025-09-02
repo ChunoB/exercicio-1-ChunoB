@@ -6,21 +6,25 @@ imax = 20;
 % nao alterar: fim
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-t = 0;
-x = zeros(imax,1);
-x(1) = x0;
-erros = zeros(imax,1);
-for j = 1:imax -1
-  x(j+1) = x(j) - (func(x(j)) / func_d(x(j)));
-  t = x(j+1);
-    if j ~=1
-      erros(j) = abs((x(j) - x(j-1)) / x(j));
-      if erros(j) <= es
-        break
-      endif
+
+t = zeros (imax,1);
+t(1) = x0;
+erro = zeros(length (t),1);
+
+for ii = 1:length(t)-1
+  ii;
+  if ii ~= 1
+    erro(ii) = abs((t(ii)-t(ii-1))/t(ii));
+    if erro(ii) < es
+      break
     endif
+  endif
+  t(ii+1) = t(ii) - func(t(ii))/func_d(t(ii));
 endfor
-t
+
+t = t(ii);
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 endfunction
