@@ -1,0 +1,35 @@
+function t = exercicio1(func, func_d, x0)
+  % nao alterar: inicio
+  es = 0.01; % erro relativo máximo permitido
+  imax = 20; % número máximo de iterações
+  % nao alterar: fim
+
+  % Inicializa o vetor de iterações
+  v = zeros(imax, 1);
+  v(1) = x0; % chute inicial
+
+  for ii = 1:imax-1
+    % Calcula a derivada no ponto atual
+    df = func_d(v(ii));
+    if abs(df) < 1e-12
+      % Se a derivada for muito pequena, encerra para evitar divisão por zero
+      t = v(ii);
+      return
+    end
+
+    % Atualiza o valor usando Newton-Raphson
+    v(ii+1) = v(ii) - func(v(ii)) / df;
+
+    % Calcula o erro relativo
+    erro = abs((v(ii+1) - v(ii)) / v(ii+1));
+
+    % Verifica se o erro está dentro da tolerância
+    if erro < es
+      t = v(ii+1);
+      return
+    end
+  end
+
+  % Retorna o último valor se não convergir antes
+  t = v(imax);
+end
